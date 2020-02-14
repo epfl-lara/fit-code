@@ -1,6 +1,6 @@
 # Syntax Highlighting for Stainless Fit
 
-This is a Visual Studio Code extension for syntax highlighting in [Stainless Fit]([Syntax Highlighting for Stainless Fit](https://github.com/epfl-lara/stainlessfit)).
+This is a Visual Studio Code extension for syntax highlighting in [Stainless Fit](https://github.com/epfl-lara/stainlessfit).
 
 ## Packaging
 
