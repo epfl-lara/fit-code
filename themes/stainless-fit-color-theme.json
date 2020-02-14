@@ -1,63 +1,63 @@
 {
-	"name": "stainless-fit",
-	"type": "dark",
-	"tokenColors": [
-		{
-			"name": "Type Annotations",
-			"scope": [
-				"entity.name.type.sf"
-			],
-			"settings": {
-				"foreground": "#777777"
-			}
-		}, {
-		  "name": "Strings",
+  "name": "stainless-fit",
+  "type": "dark",
+  "tokenColors": [
+    {
+      "name": "Type Annotations",
       "scope": [
-			  "string.quoted.double.sf"
+        "entity.name.type.sf"
+      ],
+      "settings": {
+        "foreground": "#777777"
+      }
+    }, {
+      "name": "Strings",
+      "scope": [
+        "string.quoted.double.sf"
       ],
       "settings": {
         "foreground": "#ce9178"
       }
-		}, {
-		  "name": "Comments",
+    }, {
+      "name": "Comments",
       "scope": [
-			  "comment.line.double-slash.sf"
+        "comment.line.double-slash.sf"
       ],
       "settings": {
         "foreground": "#608b4e"
       }
-		}, {
-		  "name": "Control keywords",
+    }, {
+      "name": "Control keywords",
       "scope": [
-			  "keyword.control"
+        "keyword.control"
       ],
       "settings": {
         "foreground": "#a276a3"
       }
-		}, {
-		  "name": "Symbols",
+    }, {
+      "name": "Symbols",
       "scope": [
-			  "punctuation.sf"
+        "punctuation.sf"
       ],
       "settings": {
         "foreground": "#569cd6"
       }
-		}, {
-		  "name": "Type Constructors",
+    }, {
+      "name": "Type Constructors",
       "scope": [
-			  "keyword.other.type-constructors.sf"
+        "keyword.other.type-constructors.sf"
       ],
       "settings": {
         "foreground": "#716e99"
       }
-		}, {
-		  "name": "Type Annotation Keywords",
+    }, {
+      "name": "Type Annotation Keywords",
       "scope": [
-			  "keyword.other.annotations.sf"
+        "keyword.other.annotations.sf"
       ],
       "settings": {
         "foreground": "#907560"
       }
-		}
+    }
   ]
 }
