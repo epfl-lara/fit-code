@@ -13,13 +13,16 @@
 		},
 		{
 			"include": "#annotations"
+		},
+		{
+			"include": "#separators"
 		}
 	],
 	"repository": {
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.sf",
-				"match": "\\b(if|while|else|for|val|fun|keep|fix)\\b"
+				"match": "\\b(=|if|while|else|for|val|fun|keep|fix)\\b"
 			}, {
 				"name": "keyword.operator.sf",
 				"match": "\\b(right|left|first|second)\\b"
@@ -47,7 +50,13 @@
 			}, {
 				"name": "keyword.other.type-constructors.sf",
 				"match": "\\b(type|Rec|Pi|Sigma|Forall|PolyForall)\\b"
+			}, {
+				"include": "#separators"
 			}]
+		},
+		"separators": {
+			"name": "keyword.control",
+			"match": "(,|=>|=)"
 		}
 	},
 	"scopeName": "source.sf"
