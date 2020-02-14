@@ -1,0 +1,41 @@
+{
+    "publisher": "jad-hamza",
+    "name": "stainless-fit",
+    "displayName": "Stainless Fit",
+    "description": "Syntax Highlighting for Stainless Fit",
+    "version": "0.0.1",
+    "repository": "https://github.com/jad-hamza/code-stainless-fit",
+    "engines": {
+        "vscode": "^1.42.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "stainless-fit",
+                "aliases": [
+                    "Stainless Fit",
+                    "stainless-fit"
+                ],
+                "extensions": [
+                    "sf"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "stainless-fit",
+                "scopeName": "source.sf",
+                "path": "./syntaxes/stainless-fit.tmLanguage.json"
+            }
+        ]
+    },
+    "devDependencies": {
+        "ts-loader": "^6.2.1",
+        "webpack": "^4.41.6",
+        "webpack-cli": "^3.3.11"
+    }
+}

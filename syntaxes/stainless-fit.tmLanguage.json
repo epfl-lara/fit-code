@@ -1,0 +1,54 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Stainless Fit",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#annotations"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.sf",
+				"match": "\\b(if|while|else|for|val|fun|keep|fix)\\b"
+			}, {
+				"name": "keyword.operator.sf",
+				"match": "\\b(right|left|first|second)\\b"
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.sf",
+			"begin": "\"",
+			"end": "\""
+		},
+		"comments": {
+			"name": "comment.line.double-slash.sf",
+			"begin": "//",
+			"end": "\\n"
+		},
+		"annotations": {
+			"name": "entity.name.type.sf",
+			"begin": "\\[",
+			"end": "\\]",
+			"patterns": [{
+				"include": "#annotations"
+			}, {
+				"name": "keyword.other.annotations.sf",
+				"match": "\\b(fold|as|unfold|returns|decreases)\\b"
+			}, {
+				"name": "keyword.other.type-constructors.sf",
+				"match": "\\b(type|Rec|Pi|Sigma|Forall|PolyForall)\\b"
+			}]
+		}
+	},
+	"scopeName": "source.sf"
+}
