@@ -41,6 +41,13 @@
                 "scopeName": "source.sf",
                 "path": "./syntaxes/stainless-fit.tmLanguage.json"
             }
+        ],
+        "themes": [
+            {
+                "label": "stainless-fit",
+                "uiTheme": "vs-dark",
+                "path": "./themes/stainless-fit-color-theme.json"
+            }
         ]
     },
     "scripts": {
@@ -51,8 +58,8 @@
     },
     "devDependencies": {
         "@types/node": "^10.14.17",
-        "@types/vscode": "^1.34.0",
-        "tslint": "^5.16.0",
-        "typescript": "^3.5.1"
+        "@types/vscode": "^1.42.0",
+        "tslint": "^6.0.0",
+        "typescript": "^3.6.5"
     }
 }

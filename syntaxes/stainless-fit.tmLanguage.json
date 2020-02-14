@@ -49,14 +49,14 @@
 				"match": "\\b(fold|as|unfold|returns|decreases)\\b"
 			}, {
 				"name": "keyword.other.type-constructors.sf",
-				"match": "\\b(type|Rec|Pi|Sigma|Forall|PolyForall)\\b"
+				"match": "\\b(type|Rec|Pi|Sigma|Forall|PolyForall|Nat|Unit|Bool|Top|Bottom)\\b"
 			}, {
 				"include": "#separators"
 			}]
 		},
 		"separators": {
-			"name": "keyword.control",
-			"match": "(,|=>|=)"
+			"name": "punctuation.sf",
+			"match": "(,|=>|=|\\+|-|\\*)"
 		}
 	},
 	"scopeName": "source.sf"
