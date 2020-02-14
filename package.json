@@ -11,7 +11,17 @@
     "categories": [
         "Programming Languages"
     ],
+    "main": "./out/extension.js",
+    "activationEvents": [
+        "onCommand:extension.eraseTypeAnnotations"
+    ],
     "contributes": {
+        "commands": [
+            {
+                "command": "extension.eraseTypeAnnotations",
+                "title": "Erase Stainless Fit Type Annotations"
+            }
+        ],
         "languages": [
             {
                 "id": "stainless-fit",
@@ -33,9 +43,16 @@
             }
         ]
     },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "lint": "tslint -p ./",
+        "watch": "tsc -watch -p ./"
+    },
     "devDependencies": {
-        "ts-loader": "^6.2.1",
-        "webpack": "^4.41.6",
-        "webpack-cli": "^3.3.11"
+        "@types/node": "^10.14.17",
+        "@types/vscode": "^1.34.0",
+        "tslint": "^5.16.0",
+        "typescript": "^3.5.1"
     }
 }
