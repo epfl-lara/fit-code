@@ -1,6 +1,6 @@
 {
   "name": "stainless-fit",
-  "type": "dark",
+  "type": "dark-plus",
   "tokenColors": [
     {
       "name": "Type Annotations",
