@@ -9,4 +9,5 @@ Use `code --install-extension stainless-fit-0.0.1.vsix` to install the extension
 ## Packaging
 
 You can rebuild the file `stainless-fit-0.0.1.vsix` from source by running
-`vsce package` (after installing `vcse` with `npm install -g vsce`).
+`vsce package` (after installing `vcse` with `npm install -g vsce` and all
+dependencies of the project using `npm install`).
