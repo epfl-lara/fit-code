@@ -6,40 +6,40 @@ import * as vscode from 'vscode';
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-        // Use the console to output diagnostic information (console.log) and errors (console.error)
-        // This line of code will only be executed once when your extension is activated
-        console.log('Stainless Fit extension is now active!');
+  // Use the console to output diagnostic information (console.log) and errors (console.error)
+  // This line of code will only be executed once when your extension is activated
+  console.log('Stainless Fit extension is now active!');
 
-        // The command has been defined in the package.json file
-        // Now provide the implementation of the command with registerCommand
-        // The commandId parameter must match the command field in package.json
-        let disposable = vscode.commands.registerCommand('extension.eraseTypeAnnotations', () => {
-                // The code you place here will be executed every time your command is executed
+  // The command has been defined in the package.json file
+  // Now provide the implementation of the command with registerCommand
+  // The commandId parameter must match the command field in package.json
+  let disposable = vscode.commands.registerCommand('extension.eraseTypeAnnotations', () => {
+    // The code you place here will be executed every time your command is executed
 
-		// Get the active text editor
-		let editor = vscode.window.activeTextEditor;
+    // Get the active text editor
+    let editor = vscode.window.activeTextEditor;
 
-		if (editor) {
-			let document = editor.document;
-			let selection = editor.selection;
+    if (editor) {
+      let document = editor.document;
+      let selection = editor.selection;
 
-			let text = document.getText(selection);
+      let text = document.getText(selection);
 
-                        let annotation = /\[[^\[\]]*\]/gi
-                        while (text.includes("[")) {
-                                text = text.replace(annotation, "");
-                        }
+      let annotation = /\[[^\[\]]*\]/gi
+      while (text.match(annotation)) {
+        text = text.replace(annotation, "");
+      }
 
-                        let emptyFunOf = /fun *of *=/gi
-                        text = text.replace(emptyFunOf, "");
+      let emptyFunOf = /fun *of *=/gi
+      text = text.replace(emptyFunOf, "");
 
-			editor.edit(editBuilder => {
-				editBuilder.replace(selection, text);
-			});
-		}
-        });
+      editor.edit(editBuilder => {
+        editBuilder.replace(selection, text);
+      });
+    }
+  });
 
-        context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable);
 }
 
 // this method is called when your extension is deactivated
