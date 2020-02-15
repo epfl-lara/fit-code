@@ -48,7 +48,7 @@
         "themes": [
             {
                 "label": "stainless-fit",
-                "uiTheme": "vs-dark",
+                "uiTheme": "vs",
                 "path": "./themes/stainless-fit-color-theme.json"
             }
         ]

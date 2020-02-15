@@ -1,6 +1,6 @@
 {
   "name": "stainless-fit",
-  "type": "dark-plus",
+  "type": "light-plus",
   "tokenColors": [
     {
       "name": "Type Annotations",
@@ -8,7 +8,7 @@
         "entity.name.type.sf"
       ],
       "settings": {
-        "foreground": "#777777"
+        "foreground": "#237c78"
       }
     }, {
       "name": "Strings",
@@ -32,7 +32,8 @@
         "keyword.control"
       ],
       "settings": {
-        "foreground": "#a276a3"
+        "fontStyle": "bold",
+        "foreground": "#000000"
       }
     }, {
       "name": "Symbols",
@@ -40,7 +41,7 @@
         "punctuation.sf"
       ],
       "settings": {
-        "foreground": "#569cd6"
+        "foreground": "#5f393b"
       }
     }, {
       "name": "Type Constructors",
@@ -48,7 +49,8 @@
         "keyword.other.type-constructors.sf"
       ],
       "settings": {
-        "foreground": "#716e99"
+        "fontStyle": "bold",
+        "foreground": "#237c78"
       }
     }, {
       "name": "Type Annotation Keywords",
@@ -56,7 +58,8 @@
         "keyword.other.annotations.sf"
       ],
       "settings": {
-        "foreground": "#907560"
+        "fontStyle": "bold",
+        "foreground": "#237c78"
       }
     }
   ]
