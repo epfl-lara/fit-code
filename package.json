@@ -16,12 +16,15 @@
         "onCommand:extension.eraseTypeAnnotations"
     ],
     "contributes": {
-        "commands": [
-            {
-                "command": "extension.eraseTypeAnnotations",
-                "title": "Erase Stainless Fit Type Annotations"
-            }
-        ],
+        "commands": [{
+            "command": "extension.eraseTypeAnnotations",
+            "title": "Erase Stainless Fit Type Annotations"
+        }],
+        "keybindings": [{
+            "command": "extension.eraseTypeAnnotations",
+            "key": "ctrl+e ctrl+r",
+            "when": "editorTextFocus"
+        }],
         "languages": [
             {
                 "id": "stainless-fit",
