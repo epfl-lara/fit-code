@@ -3,7 +3,7 @@
     "name": "stainless-fit",
     "displayName": "Stainless Fit",
     "description": "Syntax Highlighting for Stainless Fit",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "repository": "https://github.com/jad-hamza/code-stainless-fit",
     "engines": {
         "vscode": "^1.42.0"
@@ -22,7 +22,7 @@
         }],
         "keybindings": [{
             "command": "extension.eraseTypeAnnotations",
-            "key": "ctrl+e ctrl+r",
+            "key": "ctrl+k ctrl+v",
             "when": "editorTextFocus"
         }],
         "languages": [
