@@ -1,6 +1,6 @@
 {
-  "name": "Stainless Fit",
-  "type": "light-plus",
+  "name": "Stainless Fit Dark",
+  "type": "dark-plus",
   "tokenColors": [
     {
       "name": "Type Annotations",
@@ -8,7 +8,7 @@
         "entity.name.type.sf"
       ],
       "settings": {
-        "foreground": "#237c78"
+        "foreground": "#42c8c2"
       }
     }, {
       "name": "Strings",
@@ -32,8 +32,7 @@
         "keyword.control"
       ],
       "settings": {
-        "fontStyle": "bold",
-        "foreground": "#000000"
+        "foreground": "#7c4b88"
       }
     }, {
       "name": "Symbols",
@@ -41,7 +40,7 @@
         "punctuation.sf"
       ],
       "settings": {
-        "foreground": "#5f393b"
+        "foreground": "#cf8a8e"
       }
     }, {
       "name": "Type Constructors",
@@ -50,7 +49,7 @@
       ],
       "settings": {
         "fontStyle": "bold",
-        "foreground": "#237c78"
+        "foreground": "#42c8c2"
       }
     }, {
       "name": "Type Annotation Keywords",
@@ -59,7 +58,7 @@
       ],
       "settings": {
         "fontStyle": "bold",
-        "foreground": "#237c78"
+        "foreground": "#42c8c2"
       }
     }
   ]

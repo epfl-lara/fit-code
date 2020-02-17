@@ -3,7 +3,7 @@
     "name": "stainless-fit",
     "displayName": "Stainless Fit",
     "description": "Syntax Highlighting for Stainless Fit",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "repository": "https://github.com/jad-hamza/code-stainless-fit",
     "engines": {
         "vscode": "^1.42.0"
@@ -51,9 +51,14 @@
         ],
         "themes": [
             {
-                "label": "stainless-fit",
+                "label": "Stainless Fit",
                 "uiTheme": "vs",
                 "path": "./themes/stainless-fit-color-theme.json"
+            },
+            {
+                "label": "Stainless Fit dark",
+                "uiTheme": "vs-dark",
+                "path": "./themes/stainless-fit-dark-color-theme.json"
             }
         ]
     },
