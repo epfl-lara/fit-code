@@ -19,7 +19,7 @@
         "commands": [
             {
                 "command": "extension.eraseTypeAnnotations",
-                "title": "Erase Stainless Fit Type Annotations"
+                "title": "Stainless Fit: Erase Type Annotations"
             }
         ],
         "keybindings": [
