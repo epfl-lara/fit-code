@@ -13,19 +13,29 @@
     ],
     "main": "./out/extension.js",
     "activationEvents": [
-        "onCommand:extension.eraseTypeAnnotations"
+        "onCommand:extension.eraseTypeAnnotations",
+        "onCommand:extension.evaluateCurrentFile"
     ],
     "contributes": {
         "commands": [
             {
                 "command": "extension.eraseTypeAnnotations",
                 "title": "Stainless Fit: Erase Type Annotations"
+            },
+            {
+                "command": "extension.evaluateCurrentFile",
+                "title": "Stainless Fit: Evaluate Current File"
             }
         ],
         "keybindings": [
             {
                 "command": "extension.eraseTypeAnnotations",
                 "key": "ctrl+k ctrl+v",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "extension.evaluateCurrentFile",
+                "key": "ctrl+k ctrl+e",
                 "when": "editorTextFocus"
             }
         ],

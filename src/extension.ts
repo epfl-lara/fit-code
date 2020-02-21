@@ -69,7 +69,33 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
+  let disposable2 = vscode.commands.registerCommand('extension.evaluateCurrentFile', () => {
+    // The code you place here will be executed every time your command is executed
+
+    // Get the active text editor
+    let editor = vscode.window.activeTextEditor
+
+    if (editor) {
+      let document = editor.document
+      let selection = editor.selection
+      let text = document.getText(selection)
+
+      let filename = document.fileName
+      console.log(filename)
+      const execSync = require('child_process').execSync;
+      // import { execSync } from 'child_process';  // replace ^ if using ES modules
+      const output = execSync("stainless-fit-cli eval"  + filename, { encoding: 'utf-8' });  // the default is 'buffer'
+      console.log('Output was:\n', output);
+      /* 
+      editor.edit(editBuilder => {
+        editBuilder.replace(selection, text);
+      }); */
+    }
+  });
+  
+
   context.subscriptions.push(disposable)
+  context.subscriptions.push(disposable2)
 }
 
 // this method is called when your extension is deactivated
