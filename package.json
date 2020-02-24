@@ -14,7 +14,8 @@
     "main": "./out/extension.js",
     "activationEvents": [
         "onCommand:extension.eraseTypeAnnotations",
-        "onCommand:extension.evaluateCurrentFile"
+        "onCommand:extension.evaluateCurrentFile",
+        "onCommand:extension.typecheckCurrentFile"
     ],
     "contributes": {
         "commands": [
@@ -25,6 +26,10 @@
             {
                 "command": "extension.evaluateCurrentFile",
                 "title": "Stainless Fit: Evaluate Current File"
+            },
+            {
+                "command": "extension.typecheckCurrentFile",
+                "title": "Stainless Fit: Typecheck Current File"
             }
         ],
         "keybindings": [
@@ -35,6 +40,11 @@
             },
             {
                 "command": "extension.evaluateCurrentFile",
+                "key": "ctrl+k ctrl+e",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "extension.typecheckCurrentFile",
                 "key": "ctrl+k ctrl+e",
                 "when": "editorTextFocus"
             }

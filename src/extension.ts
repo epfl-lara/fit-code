@@ -90,10 +90,32 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showInformationMessage("Evaluates to:\n" + output);
     }
   });
+
+  let typecheckCurrentFile = vscode.commands.registerCommand('extension.typecheckCurrentFile', () => {
+    // The code you place here will be executed every time your command is executed
+
+    // Get the active text editor
+    let editor = vscode.window.activeTextEditor
+
+    if (editor) {
+      let document = editor.document
+
+      let filename = document.fileName
+      
+      //let pattern = /[^\\\/]*\ [^\\\/]*/g
+
+      //let filename2 = filename.replace(pattern,'\'\$&\'')
+
+      const execSync = require('child_process').execSync;
+      const output = execSync("stainless-fit-cli typecheck \""  + filename + "\"", { encoding: 'utf-8' });
+      vscode.window.showInformationMessage(output);
+    }
+  });
   
 
   context.subscriptions.push(eraseTypeAnnotations)
   context.subscriptions.push(evaluateCurrentFile)
+  context.subscriptions.push(typecheckCurrentFile)
 }
 
 // this method is called when your extension is deactivated
