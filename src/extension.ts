@@ -77,19 +77,16 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (editor) {
       let document = editor.document
-      let selection = editor.selection
-      let text = document.getText(selection)
 
       let filename = document.fileName
-      console.log(filename)
+      
+      //let pattern = /[^\\\/]*\ [^\\\/]*/g
+
+      //let filename2 = filename.replace(pattern,'\'\$&\'')
+
       const execSync = require('child_process').execSync;
-      // import { execSync } from 'child_process';  // replace ^ if using ES modules
-      const output = execSync("stainless-fit-cli eval"  + filename, { encoding: 'utf-8' });  // the default is 'buffer'
+      const output = execSync("stainless-fit-cli eval \""  + filename + "\"", { encoding: 'utf-8' });
       console.log('Output was:\n', output);
-      /* 
-      editor.edit(editBuilder => {
-        editBuilder.replace(selection, text);
-      }); */
     }
   });
   
