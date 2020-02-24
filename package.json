@@ -3,7 +3,7 @@
     "name": "stainless-fit",
     "displayName": "Stainless Fit",
     "description": "Syntax Highlighting for Stainless Fit",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "repository": "https://github.com/jad-hamza/code-stainless-fit",
     "engines": {
         "vscode": "^1.42.0"
