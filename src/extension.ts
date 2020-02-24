@@ -85,7 +85,7 @@ export function activate(context: vscode.ExtensionContext) {
       //let filename2 = filename.replace(pattern,'\'\$&\'')
 
       const execSync = require('child_process').execSync;
-      const output = execSync("stainless-fit-cli eval \""  + filename + "\"", { encoding: 'utf-8' });
+      const output = execSync("stainless-fit-cli eval --no-info \""  + filename + "\"", { encoding: 'utf-8' });
       //console.log('Output was:\n', output);
       vscode.window.showInformationMessage("Evaluates to:\n" + output);
     }
@@ -107,7 +107,7 @@ export function activate(context: vscode.ExtensionContext) {
       //let filename2 = filename.replace(pattern,'\'\$&\'')
 
       const execSync = require('child_process').execSync;
-      const output = execSync("stainless-fit-cli typecheck \""  + filename + "\"", { encoding: 'utf-8' });
+      const output = execSync("stainless-fit-cli typecheck --no-info \""  + filename + "\"", { encoding: 'utf-8' });
       vscode.window.showInformationMessage(output);
     }
   });
