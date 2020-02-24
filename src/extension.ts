@@ -86,7 +86,8 @@ export function activate(context: vscode.ExtensionContext) {
 
       const execSync = require('child_process').execSync;
       const output = execSync("stainless-fit-cli eval \""  + filename + "\"", { encoding: 'utf-8' });
-      console.log('Output was:\n', output);
+      //console.log('Output was:\n', output);
+      vscode.window.showInformationMessage("Evaluates to:\n" + output);
     }
   });
   
