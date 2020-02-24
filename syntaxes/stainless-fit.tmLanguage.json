@@ -22,7 +22,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "keyword.control.sf",
-				"match": "\\b(=|if|while|else|for|val|fun|keep|fix)\\b"
+				"match": "\\b(=|if|while|else|for|val|fun|keep|fix|case|match)\\b"
 			}, {
 				"name": "keyword.operator.sf",
 				"match": "\\b(right|left|first|second)\\b"
