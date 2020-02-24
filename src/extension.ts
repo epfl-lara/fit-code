@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand('extension.eraseTypeAnnotations', () => {
+  let eraseTypeAnnotations = vscode.commands.registerCommand('extension.eraseTypeAnnotations', () => {
     // The code you place here will be executed every time your command is executed
 
     // Get the active text editor
@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  let disposable2 = vscode.commands.registerCommand('extension.evaluateCurrentFile', () => {
+  let evaluateCurrentFile = vscode.commands.registerCommand('extension.evaluateCurrentFile', () => {
     // The code you place here will be executed every time your command is executed
 
     // Get the active text editor
@@ -92,8 +92,8 @@ export function activate(context: vscode.ExtensionContext) {
   });
   
 
-  context.subscriptions.push(disposable)
-  context.subscriptions.push(disposable2)
+  context.subscriptions.push(eraseTypeAnnotations)
+  context.subscriptions.push(evaluateCurrentFile)
 }
 
 // this method is called when your extension is deactivated
