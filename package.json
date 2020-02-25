@@ -18,6 +18,17 @@
         "onCommand:extension.typecheckCurrentFile"
     ],
     "contributes": {
+        "configuration": {
+            "title": "Fit Code",
+            "properties": {
+                "fitcode.executablePath": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "stainless-fit-cli",
+                    "description": "Path to the stainlessfit executable, or just it's name if present on the OS' PATH variable"
+                }
+            }
+        },
         "commands": [
             {
                 "command": "extension.eraseTypeAnnotations",
