@@ -1,14 +1,14 @@
-# Syntax Highlighting for Stainless Fit
+# Fit Code
 
 This is a Visual Studio Code extension for syntax highlighting in [Stainless Fit](https://github.com/epfl-lara/stainlessfit).
 
 ## Installing
 
-Use `code --install-extension stainless-fit-0.0.3.vsix` to install the extension in VS Code.
+Download the latest release and use `code --install-extension fit-code-0.0.4.vsix` to install the extension in VS Code.
 
 ## Packaging
 
-You can rebuild the file `stainless-fit-0.0.3.vsix` from source by running
+You can rebuild the file `fit-code-0.0.4.vsix` from source by running
 `vsce package` (after installing `vcse` with `npm install -g vsce` and all
 dependencies of the project using `npm install`).
 

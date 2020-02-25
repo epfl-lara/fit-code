@@ -1,10 +1,10 @@
 {
     "publisher": "jad-hamza",
-    "name": "stainless-fit",
-    "displayName": "Stainless Fit",
+    "name": "fit-code",
+    "displayName": "Fit Code",
     "description": "Syntax Highlighting for Stainless Fit",
-    "version": "0.0.3",
-    "repository": "https://github.com/jad-hamza/code-stainless-fit",
+    "version": "0.0.4",
+    "repository": "https://github.com/epfl-lara/fit-code",
     "engines": {
         "vscode": "^1.42.0"
     },
