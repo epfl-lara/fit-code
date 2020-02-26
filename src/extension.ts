@@ -64,9 +64,14 @@ export function activate(context: vscode.ExtensionContext) {
       let document = editor.document
       let filename = document.fileName
 
-      const execSync = require('child_process').execSync;
-      const output = execSync("${fitcode.executablePath} eval --no-info \""  + filename + "\"", { encoding: 'utf-8' });
-      vscode.window.showInformationMessage("Evaluates to:\n" + output);
+      const fit = vscode.workspace.getConfiguration('fitcode').executablePath
+      const cmd = `${fit} eval --no-info \"`  + filename + "\""
+
+      console.log(`Running ${cmd}`);
+
+      const execSync = require('child_process').execSync
+      const output = execSync(cmd, { encoding: 'utf-8' })
+      vscode.window.showInformationMessage("Evaluates to:\n" + output)
     }
   });
 
@@ -77,8 +82,13 @@ export function activate(context: vscode.ExtensionContext) {
       let document = editor.document
       let filename = document.fileName
 
+      const fit = vscode.workspace.getConfiguration('fitcode').executablePath
+      const cmd = `${fit} typecheck --no-info \"`  + filename + "\""
+
+      console.log(`Running ${cmd}`);
+
       const execSync = require('child_process').execSync;
-      const output = execSync("${fitcode.executablePath} typecheck --no-info \""  + filename + "\"", { encoding: 'utf-8' });
+      const output = execSync(cmd, { encoding: 'utf-8' });
       vscode.window.showInformationMessage(output);
     }
   });

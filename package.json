@@ -24,8 +24,8 @@
                 "fitcode.executablePath": {
                     "type": "string",
                     "scope": "resource",
-                    "default": "stainless-fit-cli",
-                    "description": "Path to the stainlessfit executable, or just it's name if present on the OS' PATH variable"
+                    "default": "fit",
+                    "description": "Points to the Stainless Fit executable"
                 }
             }
         },
