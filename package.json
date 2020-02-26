@@ -51,12 +51,12 @@
             },
             {
                 "command": "extension.evaluateCurrentFile",
-                "key": "ctrl+k ctrl+e",
+                "key": "ctrl+k ctrl+b",
                 "when": "editorTextFocus"
             },
             {
                 "command": "extension.typecheckCurrentFile",
-                "key": "ctrl+k ctrl+e",
+                "key": "ctrl+k ctrl+n",
                 "when": "editorTextFocus"
             }
         ],
