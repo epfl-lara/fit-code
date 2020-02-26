@@ -4,11 +4,11 @@ This is a Visual Studio Code extension for syntax highlighting in [Stainless Fit
 
 ## Installing
 
-Download the latest release and use `code --install-extension fit-code-0.0.4.vsix` to install the extension in VS Code.
+Download the latest release and use `code --install-extension fit-code-0.0.5.vsix` to install the extension in VS Code.
 
 ## Packaging
 
-You can rebuild the file `fit-code-0.0.4.vsix` from source by running
+You can rebuild the file `fit-code-0.0.5.vsix` from source by running
 `vsce package` (after installing `vcse` with `npm install -g vsce` and all
 dependencies of the project using `npm install`).
 

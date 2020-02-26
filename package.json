@@ -3,7 +3,7 @@
     "name": "fit-code",
     "displayName": "Fit Code",
     "description": "Syntax Highlighting for Stainless Fit",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "repository": "https://github.com/epfl-lara/fit-code",
     "engines": {
         "vscode": "^1.42.0"
