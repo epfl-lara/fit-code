@@ -90,9 +90,6 @@ export function activate(context: ExtensionContext) {
         console.log(stdout)
         window.showInformationMessage(stdout)
       })
-
-      
-      
     }
   });
 
@@ -124,11 +121,11 @@ function run(cmd: string, onSucess: (stdout: string) => void ): Thenable<string>
   let progress = window.withProgress({
     location: ProgressLocation.Notification,
     title: "Running " + cmd,
-    cancellable: false
+    cancellable: true
   }, (progress, token) => {
-    /* token.onCancellationRequested(() => {
+    token.onCancellationRequested(() => {
       console.log("User canceled the long running operation");
-    }) */
+    })
     let promise: Promise<string> = sh(cmd)
     promise.then(onSucess)
     promise.catch(
