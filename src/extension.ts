@@ -6,6 +6,21 @@ export function activate(context: ExtensionContext) {
 
   console.log('Stainless Fit extension is now active!')
 
+  const fit = workspace.getConfiguration('fitcode').executablePath
+
+  var exec = require('child_process').exec, child;
+
+  child = exec(`${fit}`,
+    function (error: string, stdout: string, stderr: string) {
+      if (error !== null) {
+        window.showErrorMessage(`Couldn't reach Stainless Fit executable;\n
+          Consider installing it, adding it to the PATH variable, and changing vsCode's configurations.\n
+          Current path configurations is: ${fit}`)
+          console.log('exec error: ' + error);
+      }
+    }
+  );
+
   let eraseTypeAnnotations = commands.registerCommand('extension.eraseTypeAnnotations', () => {
     let editor = window.activeTextEditor
 
@@ -66,7 +81,6 @@ export function activate(context: ExtensionContext) {
       let document = editor.document
       let filename = document.fileName
 
-      const fit = workspace.getConfiguration('fitcode').executablePath
       const cmd = `${fit} eval --no-info \"`  + filename + "\""
 
       run(cmd, (stdout: string) => {
@@ -83,7 +97,6 @@ export function activate(context: ExtensionContext) {
       let document = editor.document
       let filename = document.fileName
 
-      const fit = workspace.getConfiguration('fitcode').executablePath
       const cmd = `${fit} typecheck --no-info \"`  + filename + "\""
 
       run(cmd, (stdout: string) => {
