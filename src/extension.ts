@@ -69,7 +69,7 @@ export function activate(context: ExtensionContext) {
       const fit = workspace.getConfiguration('fitcode').executablePath
       const cmd = `${fit} eval --no-info \"`  + filename + "\""
 
-      run(cmd,(stdout: string) => {
+      run(cmd, (stdout: string) => {
         console.log(stdout)
         window.showInformationMessage("Evaluates to:\n" + stdout)
       })
@@ -86,7 +86,7 @@ export function activate(context: ExtensionContext) {
       const fit = workspace.getConfiguration('fitcode').executablePath
       const cmd = `${fit} typecheck --no-info \"`  + filename + "\""
 
-      run(cmd,(stdout: string) => {
+      run(cmd, (stdout: string) => {
         console.log(stdout)
         window.showInformationMessage(stdout)
       })
@@ -131,7 +131,7 @@ function run(cmd: string, onSuccess: (stdout: string) => void ): Thenable<string
     promise.catch(
       (err) => console.log(err)
     )
-    return sh(cmd);
+    return promise
   });
 
   return progress
