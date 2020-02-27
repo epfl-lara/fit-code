@@ -1,11 +1,13 @@
-import * as vscode from 'vscode'
+import {ExtensionContext,window,commands,workspace,ProgressLocation,Progress,ProgressOptions} from 'vscode'
+import { exec } from 'child_process'
 
-export function activate(context: vscode.ExtensionContext) {
+
+export function activate(context: ExtensionContext) {
 
   console.log('Stainless Fit extension is now active!')
 
-  let eraseTypeAnnotations = vscode.commands.registerCommand('extension.eraseTypeAnnotations', () => {
-    let editor = vscode.window.activeTextEditor
+  let eraseTypeAnnotations = commands.registerCommand('extension.eraseTypeAnnotations', () => {
+    let editor = window.activeTextEditor
 
     if (editor) {
       let document = editor.document
@@ -57,45 +59,85 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  let evaluateCurrentFile = vscode.commands.registerCommand('extension.evaluateCurrentFile', () => {
-    let editor = vscode.window.activeTextEditor
+  let evaluateCurrentFile = commands.registerCommand('extension.evaluateCurrentFile', () => {
+    let editor = window.activeTextEditor
 
     if (editor) {
       let document = editor.document
       let filename = document.fileName
 
-      const fit = vscode.workspace.getConfiguration('fitcode').executablePath
+      const fit = workspace.getConfiguration('fitcode').executablePath
       const cmd = `${fit} eval --no-info \"`  + filename + "\""
 
-      console.log(`Running ${cmd}`);
-
-      const execSync = require('child_process').execSync
-      const output = execSync(cmd, { encoding: 'utf-8' })
-      vscode.window.showInformationMessage("Evaluates to:\n" + output)
+      run(cmd,(stdout: string) => {
+        console.log(stdout)
+        window.showInformationMessage("Evaluates to:\n" + stdout)
+      })
     }
   });
 
-  let typecheckCurrentFile = vscode.commands.registerCommand('extension.typecheckCurrentFile', () => {
-    let editor = vscode.window.activeTextEditor
+  let typecheckCurrentFile = commands.registerCommand('extension.typecheckCurrentFile', () => {
+    let editor = window.activeTextEditor
 
     if (editor) {
       let document = editor.document
       let filename = document.fileName
 
-      const fit = vscode.workspace.getConfiguration('fitcode').executablePath
+      const fit = workspace.getConfiguration('fitcode').executablePath
       const cmd = `${fit} typecheck --no-info \"`  + filename + "\""
 
-      console.log(`Running ${cmd}`);
+      run(cmd,(stdout: string) => {
+        console.log(stdout)
+        window.showInformationMessage(stdout)
+      })
 
-      const execSync = require('child_process').execSync;
-      const output = execSync(cmd, { encoding: 'utf-8' });
-      vscode.window.showInformationMessage(output);
+      
+      
     }
   });
 
   context.subscriptions.push(eraseTypeAnnotations)
   context.subscriptions.push(evaluateCurrentFile)
   context.subscriptions.push(typecheckCurrentFile)
+}
+
+/**
+ * Execute simple shell command (async wrapper).
+ * @param {String} cmd
+ * @return {Object} { stdout: String, stderr: String }
+ */
+async function sh(cmd: string): Promise<string> {
+  return new Promise<string>(function (resolve, reject) {
+    exec(cmd, (err, stdout, stderr) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(stdout);//resolve([stdout, stderr]);
+      }
+    });
+  });
+}
+
+function run(cmd: string, onSucess: (stdout: string) => void ): Thenable<string> {
+  console.log(`Running ${cmd}`);
+
+  let progress = window.withProgress({
+    location: ProgressLocation.Notification,
+    title: "Running " + cmd,
+    cancellable: false
+  }, (progress, token) => {
+    /* token.onCancellationRequested(() => {
+      console.log("User canceled the long running operation");
+    }) */
+    let promise: Promise<string> = sh(cmd)
+    promise.then(onSucess)
+    promise.catch(
+      (err) => console.log(err)
+    )
+    return sh(cmd);
+  });
+
+  return progress
 }
 
 export function deactivate() {}
