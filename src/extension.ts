@@ -121,11 +121,11 @@ function run(cmd: string, onSuccess: (stdout: string) => void ): Thenable<string
   let progress = window.withProgress({
     location: ProgressLocation.Notification,
     title: "Running " + cmd,
-    cancellable: true
+    cancellable: false
   }, (progress, token) => {
-    token.onCancellationRequested(() => {
-      console.log("User canceled the long running operation");
-    })
+    // token.onCancellationRequested(() => {
+    //   console.log("User canceled the long running operation");
+    // })
     let promise: Promise<string> = sh(cmd)
     promise.then(onSuccess)
     promise.catch(
