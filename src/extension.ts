@@ -115,7 +115,7 @@ async function sh(cmd: string): Promise<string> {
   });
 }
 
-function run(cmd: string, onSucess: (stdout: string) => void ): Thenable<string> {
+function run(cmd: string, onSuccess: (stdout: string) => void ): Thenable<string> {
   console.log(`Running ${cmd}`);
 
   let progress = window.withProgress({
@@ -127,7 +127,7 @@ function run(cmd: string, onSucess: (stdout: string) => void ): Thenable<string>
       console.log("User canceled the long running operation");
     })
     let promise: Promise<string> = sh(cmd)
-    promise.then(onSucess)
+    promise.then(onSuccess)
     promise.catch(
       (err) => console.log(err)
     )
