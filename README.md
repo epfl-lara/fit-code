@@ -19,4 +19,4 @@ This extension contains:
 * [A theme file](themes/stainless-fit-color-theme.json) for changing the colors associated to the scopes defined above.
 * [A dark theme file](themes/stainless-fit-dark-color-theme.json).
 * [A typescript file](src/extension.ts) that defines the following commands: `extension.eraseTypeAnnotations`, `extension.evaluateCurrentFile`, `extension.typecheckCurrentFile` (bound in [package.json](package.json) to `Ctrl+K Ctrl+V`).
-* [Configuration] for the path to the executable.
+* [Configuration](package.json) for the path to the executable, as well as the options it should be used with.
