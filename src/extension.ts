@@ -13,9 +13,7 @@ export function activate(context: ExtensionContext) {
   child = exec(`${fit}`,
     function (error: string, stdout: string, stderr: string) {
       if (error !== null) {
-        window.showErrorMessage(`Couldn't reach Stainless Fit executable;\n
-          Consider installing it, adding it to the PATH variable, and changing vsCode's configurations.\n
-          Current path configurations is: ${fit}`)
+        window.showErrorMessage(`${fit} not found: refer to README`)
           console.log('exec error: ' + error);
       }
     }
