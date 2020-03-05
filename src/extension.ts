@@ -1,16 +1,29 @@
 import {ExtensionContext,window,commands,workspace,ProgressLocation,Progress,ProgressOptions} from 'vscode'
 import { exec } from 'child_process'
 
+var cp = require('child_process')
+
+function fitCommand(fitCmd: string) {
+  let editor = window.activeTextEditor
+
+  if (editor) {
+    let document = editor.document
+    let filename = document.fileName
+
+    const cmd = `${fit()} ${fitCmd} ${options()} "${filename}"`
+
+    run(cmd, (stdout: string) => {
+      console.log(stdout)
+      window.showInformationMessage(stdout)
+    })
+  }
+}
 
 export function activate(context: ExtensionContext) {
 
   console.log('Stainless Fit extension is now active!')
 
-
-
-  var exec = require('child_process').exec, child;
-
-  child = exec(`${fit()}`,
+  cp.exec(`${fit()}`,
     function (error: string, stdout: string, stderr: string) {
       if (error !== null) {
         window.showErrorMessage(`${fit()} not found: refer to README`)
@@ -73,35 +86,11 @@ export function activate(context: ExtensionContext) {
   });
 
   let evaluateCurrentFile = commands.registerCommand('extension.evaluateCurrentFile', () => {
-    let editor = window.activeTextEditor
-
-    if (editor) {
-      let document = editor.document
-      let filename = document.fileName
-
-      const cmd = `${fit()} eval ${options()} "${filename}"`
-
-      run(cmd, (stdout: string) => {
-        console.log(stdout)
-        window.showInformationMessage("Evaluates to:\n" + stdout)
-      })
-    }
+    fitCommand("eval");
   });
 
   let typecheckCurrentFile = commands.registerCommand('extension.typecheckCurrentFile', () => {
-    let editor = window.activeTextEditor
-
-    if (editor) {
-      let document = editor.document
-      let filename = document.fileName
-
-      const cmd = `${fit()} typecheck ${options()} "${filename}"`
-
-      run(cmd, (stdout: string) => {
-        console.log(stdout)
-        window.showInformationMessage(stdout)
-      })
-    }
+    fitCommand("typecheck");
   });
 
   context.subscriptions.push(eraseTypeAnnotations)
@@ -112,9 +101,11 @@ export function activate(context: ExtensionContext) {
 function fit() {
   return workspace.getConfiguration('fitcode').executablePath
 }
+
 function options() {
   return workspace.getConfiguration('fitcode').executableOptions
 }
+
 /**
  * Execute simple shell command (async wrapper).
  * @param {String} cmd
