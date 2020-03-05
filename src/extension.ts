@@ -3,6 +3,8 @@ import { exec } from 'child_process'
 
 const outputChannel = window.createOutputChannel("Fit Code")
 const info = " [INFO]\t"
+const successWithoutError = "Command succesded, see output"
+const successWithError =    "Command succeded with some error, see output"
 
 
 export function activate(context: ExtensionContext) {
@@ -89,10 +91,17 @@ export function activate(context: ExtensionContext) {
 
       run(cmd, cr => {
         console.log(cr.stdout)
-        window.showInformationMessage("Command successful, see output")
-        let errorText = cr.stderr.length > 0 ? `\n${info}With error(s):\n${cr.stderr}` : ""
-        outputChannel.append(`${info}Evaluating ${filename} yields:\n${cr.stdout}${errorText}`)
-        outputChannel.show
+        console.log(cr.stderr)
+        if(cr.stderr.length > 0){
+          window.showInformationMessage(successWithError)
+          outputChannel.append(`${info}Evaluating ${filename} yielded:\n${cr.stdout}\n${info}With error(s):\n${cr.stderr}`)
+        }else{
+          window.showInformationMessage(successWithoutError)
+          outputChannel.append(`${info}Evaluating ${filename} yielded:\n${cr.stdout}`)
+          outputChannel.show
+        }
+
+
       })
     }
   })
@@ -111,7 +120,7 @@ export function activate(context: ExtensionContext) {
         console.log(cr.stdout)
         console.log(cr.stderr)
         if(cr.stderr.length > 0){
-          window.showInformationMessage("Command succeded with some error, see output")
+          window.showInformationMessage(successWithError)
           outputChannel.append(`${info}Typechecking ${filename} yielded:\n${cr.stdout}\n${info}With error(s):\n${cr.stderr}`)
         }else{
           window.showInformationMessage(cr.stdout)
