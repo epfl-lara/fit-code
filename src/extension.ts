@@ -16,8 +16,10 @@ export function activate(context: ExtensionContext) {
   child = exec(`${fit()}`,
     function (error: string, stdout: string, stderr: string) {
       if (error !== null) {
-        window.showErrorMessage(`${fit()} not found: refer to README`)
+        window.showErrorMessage(`${fit()} not found: refer to output and README`)
         console.log('exec error: ' + error)
+        outputChannel.append(error)
+        outputChannel.show
       }
     }
   )
@@ -80,14 +82,16 @@ export function activate(context: ExtensionContext) {
 
     if (editor) {
       let document = editor.document
-      let filename = document.fileName
+      let path = document.fileName
+      let filename = pathToFilename(path)
 
-      const cmd = `${fit()} eval --no-colors "${filename}"` //${options()}
+      const cmd = `${fit()} eval --no-colors ${options()} "${path}"`
 
-      run(cmd, (stdout: string) => {
-        console.log(stdout)
+      run(cmd, cr => {
+        console.log(cr.stdout)
         window.showInformationMessage("Command successful, see output")
-        outputChannel.appendLine(`${info}Evaluating ${filename} yields:\n${stdout}`)
+        let errorText = cr.stderr.length > 0 ? `\n${info}With error(s):\n${cr.stderr}` : ""
+        outputChannel.append(`${info}Evaluating ${filename} yields:\n${cr.stdout}${errorText}`)
         outputChannel.show
       })
     }
@@ -98,13 +102,20 @@ export function activate(context: ExtensionContext) {
 
     if (editor) {
       let document = editor.document
-      let filename = document.fileName
+      let path = document.fileName
+      let filename = pathToFilename(path)
 
-      const cmd = `${fit()} typecheck ${options()} "${filename}"`
+      const cmd = `${fit()} typecheck --no-info ${options()} "${path}"`
 
-      run(cmd, (stdout: string) => {
-        console.log(stdout)
-        window.showInformationMessage(stdout)
+      run(cmd, cr => {
+        console.log(cr.stdout)
+        console.log(cr.stderr)
+        if(cr.stderr.length > 0){
+          window.showInformationMessage("Command succeded with some error, see output")
+          outputChannel.append(`${info}Typechecking ${filename} yielded:\n${cr.stdout}\n${info}With error(s):\n${cr.stderr}`)
+        }else{
+          window.showInformationMessage(cr.stdout)
+        }
       })
     }
   })
@@ -120,18 +131,14 @@ function fit() {
 function options() {
   return workspace.getConfiguration('fitcode').executableOptions
 }
-/**
- * Execute simple shell command (async wrapper).
- * @param {String} cmd
- * @return {Object} { stdout: String, stderr: String }
- */
-async function sh(cmd: string): Promise<string> {
-  return new Promise<string>(function (resolve, reject) {
+
+async function sh(cmd: string): Promise<CommandReturn> {
+  return new Promise(function (resolve, reject) {
     exec(cmd, (err, stdout, stderr) => {
       if (err) {
         reject(err)
       } else {
-        resolve(stdout)//resolve([stdout, stderr])
+        resolve(new CommandReturn(stdout, stderr))
       }
     })
   })
@@ -144,7 +151,7 @@ function defaultOnFailure(error: string): void {
   outputChannel.show()
 }
 
-function run(cmd: string, onSuccess: (stdout: string) => void, onFailure = defaultOnFailure): Thenable<string> {
+function run(cmd: string, onSuccess: (stdout: CommandReturn) => void, onFailure = defaultOnFailure): Thenable<CommandReturn> {
   console.log(`Running ${cmd}`)
 
   let progress = window.withProgress({
@@ -155,13 +162,22 @@ function run(cmd: string, onSuccess: (stdout: string) => void, onFailure = defau
     // token.onCancellationRequested(() => {
     //   console.log("User canceled the long running operation")
     // })
-    let promise: Promise<string> = sh(cmd)
+    let promise: Promise<CommandReturn> = sh(cmd)
     promise.then(onSuccess)
     promise.catch(onFailure)
     return promise
   })
 
   return progress
+}
+
+function pathToFilename(path: string): string{
+  let regex = /([^/\\]*[/\\][/\\]*)*/ //leaves only filename
+  return path.replace(regex,"")
+}
+
+class CommandReturn{
+  constructor(readonly stdout: string,readonly stderr: string){}
 }
 
 export function deactivate() {

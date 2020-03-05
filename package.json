@@ -30,7 +30,7 @@
                 "fitcode.executableOptions": {
                     "type": "string",
                     "scope": "resource",
-                    "default": "--no-info --no-colors",
+                    "default": "",
                     "description": "Options passed to the Stainless Fit executable"
                 }
             }
