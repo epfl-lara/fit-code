@@ -6,15 +6,14 @@ export function activate(context: ExtensionContext) {
 
   console.log('Stainless Fit extension is now active!')
 
-  const fit = workspace.getConfiguration('fitcode').executablePath
-  const options = workspace.getConfiguration('fitcode').executableOptions
+
 
   var exec = require('child_process').exec, child;
 
-  child = exec(`${fit}`,
+  child = exec(`${fit()}`,
     function (error: string, stdout: string, stderr: string) {
       if (error !== null) {
-        window.showErrorMessage(`${fit} not found: refer to README`)
+        window.showErrorMessage(`${fit()} not found: refer to README`)
           console.log('exec error: ' + error);
       }
     }
@@ -80,7 +79,7 @@ export function activate(context: ExtensionContext) {
       let document = editor.document
       let filename = document.fileName
 
-      const cmd = `${fit} eval ${options} "${filename}"`
+      const cmd = `${fit()} eval ${options()} "${filename}"`
 
       run(cmd, (stdout: string) => {
         console.log(stdout)
@@ -96,7 +95,7 @@ export function activate(context: ExtensionContext) {
       let document = editor.document
       let filename = document.fileName
 
-      const cmd = `${fit} typecheck ${options} "${filename}"`
+      const cmd = `${fit()} typecheck ${options()} "${filename}"`
 
       run(cmd, (stdout: string) => {
         console.log(stdout)
@@ -110,6 +109,12 @@ export function activate(context: ExtensionContext) {
   context.subscriptions.push(typecheckCurrentFile)
 }
 
+function fit() {
+  return workspace.getConfiguration('fitcode').executablePath
+}
+function options() {
+  return workspace.getConfiguration('fitcode').executableOptions
+}
 /**
  * Execute simple shell command (async wrapper).
  * @param {String} cmd
