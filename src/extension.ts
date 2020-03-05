@@ -3,7 +3,7 @@ import { exec } from 'child_process'
 
 const outputChannel = window.createOutputChannel("Fit Code")
 const info = " [INFO]\t"
-const successWithoutError = "Command succesded, see output"
+const successWithoutError = "Command succeded, see output"
 const successWithError =    "Command succeded with some error, see output"
 
 
