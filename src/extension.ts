@@ -1,23 +1,26 @@
 import {ExtensionContext,window,commands,workspace,ProgressLocation,Progress,ProgressOptions} from 'vscode'
 import { exec } from 'child_process'
 
+const outputChannel = window.createOutputChannel("Fit Code")
+const info = " [INFO]\t"
+
 
 export function activate(context: ExtensionContext) {
 
   console.log('Stainless Fit extension is now active!')
+  outputChannel.appendLine(`${info}Stainless Fit extension is now active!`)
 
 
-
-  var exec = require('child_process').exec, child;
+  var exec = require('child_process').exec, child
 
   child = exec(`${fit()}`,
     function (error: string, stdout: string, stderr: string) {
       if (error !== null) {
         window.showErrorMessage(`${fit()} not found: refer to README`)
-          console.log('exec error: ' + error);
+        console.log('exec error: ' + error)
       }
     }
-  );
+  )
 
   let eraseTypeAnnotations = commands.registerCommand('extension.eraseTypeAnnotations', () => {
     let editor = window.activeTextEditor
@@ -67,10 +70,10 @@ export function activate(context: ExtensionContext) {
       text = text.replace(oddIndentation, "$1$2$3")
 
       editor.edit(editBuilder => {
-        editBuilder.replace(selection, text);
-      });
+        editBuilder.replace(selection, text)
+      })
     }
-  });
+  })
 
   let evaluateCurrentFile = commands.registerCommand('extension.evaluateCurrentFile', () => {
     let editor = window.activeTextEditor
@@ -79,14 +82,16 @@ export function activate(context: ExtensionContext) {
       let document = editor.document
       let filename = document.fileName
 
-      const cmd = `${fit()} eval ${options()} "${filename}"`
+      const cmd = `${fit()} eval --no-colors "${filename}"` //${options()}
 
       run(cmd, (stdout: string) => {
         console.log(stdout)
-        window.showInformationMessage("Evaluates to:\n" + stdout)
+        window.showInformationMessage("Command successful, see output")
+        outputChannel.appendLine(`${info}Evaluating ${filename} yields:\n${stdout}`)
+        outputChannel.show
       })
     }
-  });
+  })
 
   let typecheckCurrentFile = commands.registerCommand('extension.typecheckCurrentFile', () => {
     let editor = window.activeTextEditor
@@ -102,7 +107,7 @@ export function activate(context: ExtensionContext) {
         window.showInformationMessage(stdout)
       })
     }
-  });
+  })
 
   context.subscriptions.push(eraseTypeAnnotations)
   context.subscriptions.push(evaluateCurrentFile)
@@ -124,16 +129,23 @@ async function sh(cmd: string): Promise<string> {
   return new Promise<string>(function (resolve, reject) {
     exec(cmd, (err, stdout, stderr) => {
       if (err) {
-        reject(err);
+        reject(err)
       } else {
-        resolve(stdout);//resolve([stdout, stderr]);
+        resolve(stdout)//resolve([stdout, stderr])
       }
-    });
-  });
+    })
+  })
 }
 
-function run(cmd: string, onSuccess: (stdout: string) => void ): Thenable<string> {
-  console.log(`Running ${cmd}`);
+function defaultOnFailure(error: string): void {
+  console.log('exec error: ' + error)
+  window.showErrorMessage("Command failed, see output")
+  outputChannel.appendLine(error)
+  outputChannel.show()
+}
+
+function run(cmd: string, onSuccess: (stdout: string) => void, onFailure = defaultOnFailure): Thenable<string> {
+  console.log(`Running ${cmd}`)
 
   let progress = window.withProgress({
     location: ProgressLocation.Notification,
@@ -141,17 +153,17 @@ function run(cmd: string, onSuccess: (stdout: string) => void ): Thenable<string
     cancellable: false
   }, (progress, token) => {
     // token.onCancellationRequested(() => {
-    //   console.log("User canceled the long running operation");
+    //   console.log("User canceled the long running operation")
     // })
     let promise: Promise<string> = sh(cmd)
     promise.then(onSuccess)
-    promise.catch(
-      (err) => console.log(err)
-    )
+    promise.catch(onFailure)
     return promise
-  });
+  })
 
   return progress
 }
 
-export function deactivate() {}
+export function deactivate() {
+  outputChannel.dispose()
+}
