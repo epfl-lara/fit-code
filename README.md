@@ -18,5 +18,5 @@ This extension contains:
 * [A grammar](syntaxes/stainless-fit.tmLanguage.json) to define the scopes of the syntax.
 * [A theme file](themes/stainless-fit-color-theme.json) for changing the colors associated to the scopes defined above.
 * [A dark theme file](themes/stainless-fit-dark-color-theme.json).
-* [A typescript file](src/extension.ts) that defines the following commands: `extension.eraseTypeAnnotations`, `extension.evaluateCurrentFile`, `extension.typecheckCurrentFile` (bound in [package.json](package.json) to `Ctrl+K Ctrl+V`).
+* [A typescript file](src/extension.ts) that defines the following commands: `extension.eraseTypeAnnotations`, `extension.evaluateCurrentFile`, `extension.typecheckCurrentFile` (bound in [package.json](package.json) to `Ctrl+K Ctrl+V`, `Ctrl+K Ctrl+B`, and `Ctrl+K Ctrl+N`).
 * [Configuration](package.json) for the path to the executable, as well as the options it should be used with.
