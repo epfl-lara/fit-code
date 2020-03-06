@@ -1,21 +1,32 @@
 import {ExtensionContext,window,commands,workspace,ProgressLocation,Progress,ProgressOptions} from 'vscode'
-import { exec } from 'child_process'
+import { exec, ExecException } from 'child_process'
 
 const outputChannel = window.createOutputChannel("Fit Code")
-const info = " [INFO]\t"
 const successWithoutError = "Command succeded, see output"
 const successWithError =    "Command succeded with some error, see output"
 
+var cp = require('child_process')
+
+function fitCommand(fitCmd: string) {
+  let editor = window.activeTextEditor
+
+  if (editor) {
+    let document = editor.document
+    let path = document.fileName
+    //let filename = pathToFilename(path)
+
+    const cmd = `${fit()} ${fitCmd} ${options()} "${path}"`
+
+    run(cmd)
+  }
+}
 
 export function activate(context: ExtensionContext) {
 
   console.log('Stainless Fit extension is now active!')
-  outputChannel.appendLine(`${info}Stainless Fit extension is now active!`)
+  outputChannel.appendLine(`Stainless Fit extension is now active!`)
 
-
-  var exec = require('child_process').exec, child
-
-  child = exec(`${fit()}`,
+  cp.exec(`${fit()}`,
     function (error: string, stdout: string, stderr: string) {
       if (error !== null) {
         window.showErrorMessage(`${fit()} not found: refer to output and README`)
@@ -80,54 +91,12 @@ export function activate(context: ExtensionContext) {
   })
 
   let evaluateCurrentFile = commands.registerCommand('extension.evaluateCurrentFile', () => {
-    let editor = window.activeTextEditor
-
-    if (editor) {
-      let document = editor.document
-      let path = document.fileName
-      let filename = pathToFilename(path)
-
-      const cmd = `${fit()} eval --no-colors ${options()} "${path}"`
-
-      run(cmd, cr => {
-        console.log(cr.stdout)
-        console.log(cr.stderr)
-        if(cr.stderr.length > 0){
-          window.showInformationMessage(successWithError)
-          outputChannel.append(`${info}Evaluating ${filename} yielded:\n${cr.stdout}\n${info}With error(s):\n${cr.stderr}`)
-        }else{
-          window.showInformationMessage(successWithoutError)
-          outputChannel.append(`${info}Evaluating ${filename} yielded:\n${cr.stdout}`)
-          outputChannel.show
-        }
-
-
-      })
-    }
-  })
+    fitCommand("eval");
+  });
 
   let typecheckCurrentFile = commands.registerCommand('extension.typecheckCurrentFile', () => {
-    let editor = window.activeTextEditor
-
-    if (editor) {
-      let document = editor.document
-      let path = document.fileName
-      let filename = pathToFilename(path)
-
-      const cmd = `${fit()} typecheck --no-info ${options()} "${path}"`
-
-      run(cmd, cr => {
-        console.log(cr.stdout)
-        console.log(cr.stderr)
-        if(cr.stderr.length > 0){
-          window.showInformationMessage(successWithError)
-          outputChannel.append(`${info}Typechecking ${filename} yielded:\n${cr.stdout}\n${info}With error(s):\n${cr.stderr}`)
-        }else{
-          window.showInformationMessage(cr.stdout)
-        }
-      })
-    }
-  })
+    fitCommand("typecheck");
+  });
 
   context.subscriptions.push(eraseTypeAnnotations)
   context.subscriptions.push(evaluateCurrentFile)
@@ -137,41 +106,48 @@ export function activate(context: ExtensionContext) {
 function fit() {
   return workspace.getConfiguration('fitcode').executablePath
 }
+
 function options() {
   return workspace.getConfiguration('fitcode').executableOptions
 }
 
-async function sh(cmd: string): Promise<CommandReturn> {
+async function sh(cmd: string): Promise<string> {
   return new Promise(function (resolve, reject) {
     exec(cmd, (err, stdout, stderr) => {
-      if (err) {
-        reject(err)
+      if ( stdout.length == 0 || err) {
+        reject(new CommandReturn(stdout, stderr, err))
       } else {
-        resolve(new CommandReturn(stdout, stderr))
+        resolve(stdout)
       }
     })
   })
 }
 
-function defaultOnFailure(error: string): void {
-  console.log('exec error: ' + error)
-  window.showErrorMessage("Command failed, see output")
-  outputChannel.appendLine(error)
-  outputChannel.show()
+function defaultOnSuccess(stdout: string): void {
+  console.log(stdout)
+  window.showInformationMessage(stdout)
+  outputChannel.append(stdout)
 }
 
-function run(cmd: string, onSuccess: (stdout: CommandReturn) => void, onFailure = defaultOnFailure): Thenable<CommandReturn> {
-  console.log(`Running ${cmd}`)
+function defaultOnFailure(cr:CommandReturn): void {
+  console.log(cr.toString)
+  window.showErrorMessage("Error occured, see output")
+  outputChannel.append(cr.toString())
+}
+
+function run(cmd: string, onSuccess = defaultOnSuccess, onFailure = defaultOnFailure): Thenable<string> {
+  let running = `Running ${cmd}`
+  console.log(running)
 
   let progress = window.withProgress({
     location: ProgressLocation.Notification,
-    title: "Running " + cmd,
+    title: running,
     cancellable: false
   }, (progress, token) => {
     // token.onCancellationRequested(() => {
     //   console.log("User canceled the long running operation")
     // })
-    let promise: Promise<CommandReturn> = sh(cmd)
+    let promise = sh(cmd)
     promise.then(onSuccess)
     promise.catch(onFailure)
     return promise
@@ -186,7 +162,12 @@ function pathToFilename(path: string): string{
 }
 
 class CommandReturn{
-  constructor(readonly stdout: string,readonly stderr: string){}
+  constructor(readonly stdout: string, readonly stderr: string, readonly err?: ExecException | null){}
+
+  toString() {
+    let errString = this.err ? this.err : ""
+    return `${this.stdout}${this.stderr}${errString}`
+  }
 }
 
 export function deactivate() {
