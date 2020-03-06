@@ -2,8 +2,6 @@ import {ExtensionContext,window,commands,workspace,ProgressLocation,Progress,Pro
 import { exec, ExecException } from 'child_process'
 
 const outputChannel = window.createOutputChannel("Fit Code")
-const successWithoutError = "Command succeded, see output"
-const successWithError =    "Command succeded with some error, see output"
 
 var cp = require('child_process')
 
