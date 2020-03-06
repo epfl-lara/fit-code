@@ -1,5 +1,7 @@
 import {ExtensionContext,window,commands,workspace,ProgressLocation,Progress,ProgressOptions} from 'vscode'
-import { exec } from 'child_process'
+import { exec, ExecException } from 'child_process'
+
+const outputChannel = window.createOutputChannel("Fit Code")
 
 var cp = require('child_process')
 
@@ -8,29 +10,30 @@ function fitCommand(fitCmd: string) {
 
   if (editor) {
     let document = editor.document
-    let filename = document.fileName
+    let path = document.fileName
+    //let filename = pathToFilename(path)
 
-    const cmd = `${fit()} ${fitCmd} ${options()} "${filename}"`
+    const cmd = `${fit()} ${fitCmd} ${options()} "${path}"`
 
-    run(cmd, (stdout: string) => {
-      console.log(stdout)
-      window.showInformationMessage(stdout)
-    })
+    run(cmd)
   }
 }
 
 export function activate(context: ExtensionContext) {
 
   console.log('Stainless Fit extension is now active!')
+  outputChannel.appendLine(`Stainless Fit extension is now active!`)
 
   cp.exec(`${fit()}`,
     function (error: string, stdout: string, stderr: string) {
       if (error !== null) {
-        window.showErrorMessage(`${fit()} not found: refer to README`)
-          console.log('exec error: ' + error);
+        window.showErrorMessage(`${fit()} not found: refer to output and README`)
+        console.log('exec error: ' + error)
+        outputChannel.append(error)
+        outputChannel.show
       }
     }
-  );
+  )
 
   let eraseTypeAnnotations = commands.registerCommand('extension.eraseTypeAnnotations', () => {
     let editor = window.activeTextEditor
@@ -80,10 +83,10 @@ export function activate(context: ExtensionContext) {
       text = text.replace(oddIndentation, "$1$2$3")
 
       editor.edit(editBuilder => {
-        editBuilder.replace(selection, text);
-      });
+        editBuilder.replace(selection, text)
+      })
     }
-  });
+  })
 
   let evaluateCurrentFile = commands.registerCommand('extension.evaluateCurrentFile', () => {
     fitCommand("eval");
@@ -106,43 +109,65 @@ function options() {
   return workspace.getConfiguration('fitcode').executableOptions
 }
 
-/**
- * Execute simple shell command (async wrapper).
- * @param {String} cmd
- * @return {Object} { stdout: String, stderr: String }
- */
 async function sh(cmd: string): Promise<string> {
-  return new Promise<string>(function (resolve, reject) {
+  return new Promise(function (resolve, reject) {
     exec(cmd, (err, stdout, stderr) => {
-      if (err) {
-        reject(err);
+      if ( stdout.length == 0 || err) {
+        reject(new CommandReturn(stdout, stderr, err))
       } else {
-        resolve(stdout);//resolve([stdout, stderr]);
+        resolve(stdout)
       }
-    });
-  });
+    })
+  })
 }
 
-function run(cmd: string, onSuccess: (stdout: string) => void ): Thenable<string> {
-  console.log(`Running ${cmd}`);
+function defaultOnSuccess(stdout: string): void {
+  console.log(stdout)
+  window.showInformationMessage(stdout)
+  outputChannel.append(stdout)
+}
+
+function defaultOnFailure(cr:CommandReturn): void {
+  console.log(cr.toString)
+  window.showErrorMessage("Error occured, see output")
+  outputChannel.append(cr.toString())
+}
+
+function run(cmd: string, onSuccess = defaultOnSuccess, onFailure = defaultOnFailure): Thenable<string> {
+  let running = `Running ${cmd}`
+  console.log(running)
 
   let progress = window.withProgress({
     location: ProgressLocation.Notification,
-    title: "Running " + cmd,
+    title: running,
     cancellable: false
   }, (progress, token) => {
     // token.onCancellationRequested(() => {
-    //   console.log("User canceled the long running operation");
+    //   console.log("User canceled the long running operation")
     // })
-    let promise: Promise<string> = sh(cmd)
+    let promise = sh(cmd)
     promise.then(onSuccess)
-    promise.catch(
-      (err) => console.log(err)
-    )
+    promise.catch(onFailure)
     return promise
-  });
+  })
 
   return progress
 }
 
-export function deactivate() {}
+function pathToFilename(path: string): string{
+  let regex = /([^/\\]*[/\\][/\\]*)*/ //leaves only filename
+  return path.replace(regex,"")
+}
+
+class CommandReturn{
+  constructor(readonly stdout: string, readonly stderr: string, readonly err?: ExecException | null){}
+
+  toString() {
+    let errString = this.err ? this.err : ""
+    return `${this.stdout}${this.stderr}${errString}`
+  }
+}
+
+export function deactivate() {
+  outputChannel.dispose()
+}
