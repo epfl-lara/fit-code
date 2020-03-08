@@ -1,6 +1,7 @@
 {
     "publisher": "epfl-lara",
     "name": "fit-code",
+    "license" : "Apache-2.0",
     "displayName": "Fit Code",
     "description": "Syntax Highlighting for Stainless Fit",
     "version": "0.0.6",
@@ -105,8 +106,8 @@
         "watch": "tsc -watch -p ./"
     },
     "devDependencies": {
-        "@types/node": "^13.7.1",
+        "@types/node": "^13.9.0",
         "@types/vscode": "^1.42.0",
-        "typescript": "^3.6.5"
+        "typescript": "^3.8.3"
     }
 }
