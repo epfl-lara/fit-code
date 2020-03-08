@@ -11,11 +11,8 @@ function fitCommand(fitCmd: string) {
   if (editor) {
     let document = editor.document
     let path = document.fileName
-    //let filename = pathToFilename(path)
 
-    const cmd = `${fit()} ${fitCmd} ${options()} "${path}"`
-
-    run(cmd)
+    run(`${fit()} ${fitCmd} ${options()} "${path}"`)
   }
 }
 
@@ -112,7 +109,7 @@ function options() {
 async function sh(cmd: string): Promise<string> {
   return new Promise(function (resolve, reject) {
     exec(cmd, (err, stdout, stderr) => {
-      if ( stdout.length == 0 || err) {
+      if (stdout.length == 0 || err) {
         reject(new CommandReturn(stdout, stderr, err))
       } else {
         resolve(stdout)
@@ -129,7 +126,7 @@ function defaultOnSuccess(stdout: string): void {
 
 function defaultOnFailure(cr:CommandReturn): void {
   console.log(cr.toString)
-  window.showErrorMessage("Error occured, see output")
+  window.showErrorMessage("Error occurred, see output")
   outputChannel.append(cr.toString())
 }
 
@@ -152,11 +149,6 @@ function run(cmd: string, onSuccess = defaultOnSuccess, onFailure = defaultOnFai
   })
 
   return progress
-}
-
-function pathToFilename(path: string): string{
-  let regex = /([^/\\]*[/\\][/\\]*)*/ //leaves only filename
-  return path.replace(regex,"")
 }
 
 class CommandReturn{
