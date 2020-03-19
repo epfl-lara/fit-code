@@ -14,9 +14,10 @@
     ],
     "main": "./out/extension.js",
     "activationEvents": [
-        "onCommand:extension.eraseTypeAnnotations",
-        "onCommand:extension.evaluateCurrentFile",
-        "onCommand:extension.typecheckCurrentFile"
+        "onCommand:extension.fit.eraseTypeAnnotations",
+        "onCommand:extension.fit.evaluateCurrentFile",
+        "onCommand:extension.fit.typecheckCurrentFile",
+        "onCommand:extension.fit.openHTML"
     ],
     "contributes": {
         "configuration": {
@@ -38,33 +39,42 @@
         },
         "commands": [
             {
-                "command": "extension.eraseTypeAnnotations",
+                "command": "extension.fit.eraseTypeAnnotations",
                 "title": "Stainless Fit: Erase Type Annotations"
             },
             {
-                "command": "extension.evaluateCurrentFile",
+                "command": "extension.fit.evaluateCurrentFile",
                 "title": "Stainless Fit: Evaluate Current File"
             },
             {
-                "command": "extension.typecheckCurrentFile",
+                "command": "extension.fit.typecheckCurrentFile",
                 "title": "Stainless Fit: Typecheck Current File"
+            },
+            {
+                "command": "extension.fit.openHTML",
+                "title": "Stainless Fit: Open HTML View"
             }
         ],
         "keybindings": [
             {
-                "command": "extension.eraseTypeAnnotations",
+                "command": "extension.fit.eraseTypeAnnotations",
                 "key": "ctrl+k ctrl+v",
-                "when": "editorTextFocus"
+                "when": "editorLangId == 'stainless-fit'"
             },
             {
-                "command": "extension.evaluateCurrentFile",
+                "command": "extension.fit.evaluateCurrentFile",
                 "key": "ctrl+k ctrl+b",
-                "when": "editorTextFocus"
+                "when": "editorLangId == 'stainless-fit'"
             },
             {
-                "command": "extension.typecheckCurrentFile",
+                "command": "extension.fit.typecheckCurrentFile",
                 "key": "ctrl+k ctrl+n",
-                "when": "editorTextFocus"
+                "when": "editorLangId == 'stainless-fit'"
+            },
+            {
+                "command": "extension.fit.openHTML",
+                "key": "ctrl+k ctrl+g",
+                "when": ""
             }
         ],
         "languages": [
@@ -72,7 +82,8 @@
                 "id": "stainless-fit",
                 "aliases": [
                     "Stainless Fit",
-                    "stainless-fit"
+                    "stainless-fit",
+                    "fit"
                 ],
                 "extensions": [
                     "sf"

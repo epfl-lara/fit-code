@@ -1,9 +1,11 @@
 import {ExtensionContext,window,commands,workspace,ProgressLocation,Progress,ProgressOptions} from 'vscode'
+import * as vscode from 'vscode';
 import { exec, ExecException } from 'child_process'
 
 const outputChannel = window.createOutputChannel("Fit Code")
 
 var cp = require('child_process')
+var fs = require('fs')
 
 function fitCommand(fitCmd: string) {
   let editor = window.activeTextEditor
@@ -32,7 +34,7 @@ export function activate(context: ExtensionContext) {
     }
   )
 
-  let eraseTypeAnnotations = commands.registerCommand('extension.eraseTypeAnnotations', () => {
+  let eraseTypeAnnotations = commands.registerCommand('extension.fit.eraseTypeAnnotations', () => {
     let editor = window.activeTextEditor
 
     if (editor) {
@@ -85,17 +87,60 @@ export function activate(context: ExtensionContext) {
     }
   })
 
-  let evaluateCurrentFile = commands.registerCommand('extension.evaluateCurrentFile', () => {
-    fitCommand("eval");
-  });
+  let evaluateCurrentFile = commands.registerCommand('extension.fit.evaluateCurrentFile', () => {
+    fitCommand("eval")
+  })
 
-  let typecheckCurrentFile = commands.registerCommand('extension.typecheckCurrentFile', () => {
-    fitCommand("typecheck");
-  });
+  let typecheckCurrentFile = commands.registerCommand('extension.fit.typecheckCurrentFile', () => {
+    fitCommand("typecheck")
+  })
+
+  let panels: Map<string, vscode.WebviewPanel> = new Map()
+
+
+
+  let openHTML = commands.registerCommand('extension.fit.openHTML', () => {
+    let editor = window.activeTextEditor || window.visibleTextEditors[0]
+
+    if (editor) {
+      let path = editor.document.fileName
+      let htmlPath = `${path}.html`
+
+      const existingPanel = panels.get(path)
+
+      if (existingPanel) {
+        updateHTML(existingPanel, htmlPath)
+      } else {
+        let panel = vscode.window.createWebviewPanel(
+            'fitHTML',
+            `Fit HTML: ${path}`,
+            { preserveFocus: true, viewColumn: vscode.ViewColumn.Beside },
+            {
+              // Enable javascript in the webview
+              enableScripts: true,
+              localResourceRoots: []
+            }
+          )
+
+        updateHTML(panel, htmlPath)
+        panels.set(path, panel)
+        fs.watch(htmlPath, (event: string) => {
+          console.log(event)
+          updateHTML(panel, htmlPath)
+        })
+      }
+    }
+  })
 
   context.subscriptions.push(eraseTypeAnnotations)
   context.subscriptions.push(evaluateCurrentFile)
   context.subscriptions.push(typecheckCurrentFile)
+  context.subscriptions.push(openHTML)
+}
+
+function updateHTML(panel: vscode.WebviewPanel, htmlPath: string): void {
+  panel.webview.html = fs.readFileSync(htmlPath, 'utf8')
+  panel.reveal(undefined, true)
 }
 
 function fit() {
